@@ -1,0 +1,6 @@
+/node_modules
+*.zip
+.DS_Store
+*.joined.json
+*.kml
+*-*-*.xlsx

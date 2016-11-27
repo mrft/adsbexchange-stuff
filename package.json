@@ -1,0 +1,22 @@
+{
+  "name": "adsbexchange",
+  "version": "1.0.0",
+  "description": "Transform adsbexchange data from per timestamp to per airplane",
+  "main": "index.iced",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "JSONStream": "^1.2.1",
+    "async": "^2.1.2",
+    "commander": "^2.9.0",
+    "fast-json-patch": "^1.1.1",
+    "line-by-line": "^0.1.5",
+    "onecolor": "^3.0.4",
+    "require-cson": "^0.1.0",
+    "unzipper": "^0.4.1",
+    "xlsx-populate": "^0.4.0"
+  }
+}
