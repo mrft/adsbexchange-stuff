@@ -433,5 +433,5 @@ var VRS;
     };
 })(VRS || (VRS = {}));
 
-
+// everything above this line comes from https://github.com/vradarserver/vrs/blob/master/VirtualRadar.WebSite/Site/Web/script/vrs/enums.js
 module.exports = VRS;

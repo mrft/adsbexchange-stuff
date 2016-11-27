@@ -2,7 +2,7 @@ fs = require( 'fs' )
 JSONStream = require('JSONStream')
 util = require( 'util' )
 
-# virtual radar server enums
+# virtual radar server enums: see https://github.com/vradarserver/vrs/blob/master/VirtualRadar.WebSite/Site/Web/script/vrs/enums.js
 VRSenums = require( './VRS.js' )
 
 
