@@ -1,5 +1,5 @@
 ###
-	Used to transform from zip-file (1 file per minute) to a format that contain a map per aircraft.Id
+  Used to transform from zip-file (1 file per minute) to a format that contain a map per aircraft.Id
 ###
 
 
@@ -35,7 +35,7 @@ program
 
 
 
-# Mil	Boolean	Yes	True if the aircraft appears to be operated by the military.
+# Mil  Boolean  Yes  True if the aircraft appears to be operated by the military.
 
 
 
@@ -45,28 +45,28 @@ idMap =  {}
 
 
 addMinuteObjToIdMap = ( obj ) ->
-	for aircraft in obj?.acList
-		if aircraft.Mil or not program.militaryOnly
-			hasCos = aircraft.Cos?
-			transformedCos = if hasCos then utils.cos2ArrayOfArrays( aircraft.Cos ) else null
-			if not idMap[ aircraft.Id ]?
-				# console.log( aircraft.Id )
-				aircraft.Cos = transformedCos if hasCos
-				idMap[ aircraft.Id ] = aircraft
-			else
-				cosSoFar = idMap[ aircraft.Id ].Cos || []
-				# use the latest values, and join the Cos
-				joinedAircraft = aircraft
+  for aircraft in obj?.acList
+    if aircraft.Mil or not program.militaryOnly
+      hasCos = aircraft.Cos?
+      transformedCos = if hasCos then utils.cos2ArrayOfArrays( aircraft.Cos ) else null
+      if not idMap[ aircraft.Id ]?
+        # console.log( aircraft.Id )
+        aircraft.Cos = transformedCos if hasCos
+        idMap[ aircraft.Id ] = aircraft
+      else
+        cosSoFar = idMap[ aircraft.Id ].Cos || []
+        # use the latest values, and join the Cos
+        joinedAircraft = aircraft
 
-				# console.log( "Id #{aircraft.Id} already found..." )
-				if hasCos
-					for c in transformedCos
-						# if timestamp equal to latest, don't add
-						if ( cosSoFar.length == 0 or cosSoFar[ cosSoFar.length - 1 ][ 2 ] != c[ 2 ] )
-							cosSoFar.push( c )
+        # console.log( "Id #{aircraft.Id} already found..." )
+        if hasCos
+          for c in transformedCos
+            # if timestamp equal to latest, don't add
+            if ( cosSoFar.length == 0 or cosSoFar[ cosSoFar.length - 1 ][ 2 ] != c[ 2 ] )
+              cosSoFar.push( c )
 
-				joinedAircraft.Cos = cosSoFar
-				idMap[ aircraft.Id ] = joinedAircraft
+        joinedAircraft.Cos = cosSoFar
+        idMap[ aircraft.Id ] = joinedAircraft
 
 
 
@@ -81,8 +81,8 @@ lngDiff = 0.4
 
 
 isAround = ( point, referencePoint ) ->
-	# console.error( "Is #{ JSON.stringify( point ) } araound #{ JSON.stringify( referencePoint ) }?" )
-	return ( ( referencePoint.lat - latDiff ) < point.lat < ( referencePoint.lat + latDiff ) ) and ( ( referencePoint.lng - lngDiff ) < point.lng < ( referencePoint.lng + lngDiff ) ) 
+  # console.error( "Is #{ JSON.stringify( point ) } araound #{ JSON.stringify( referencePoint ) }?" )
+  return ( ( referencePoint.lat - latDiff ) < point.lat < ( referencePoint.lat + latDiff ) ) and ( ( referencePoint.lng - lngDiff ) < point.lng < ( referencePoint.lng + lngDiff ) ) 
 
 
 
@@ -100,47 +100,47 @@ tempfilecounter = 0
 
 readStream = fs.createReadStream( filename ).pipe( unzip.Parse() )
 await readStream
-	.on( 'entry', ( entry ) ->
-		counter++
-		fileName = entry.path
-		type = entry.type # 'Directory' or 'File' 
-		size = entry.size
+  .on( 'entry', ( entry ) ->
+    counter++
+    fileName = entry.path
+    type = entry.type # 'Directory' or 'File' 
+    size = entry.size
 
-		console.error( "Trying to parse #{fileName}" )
-		# DEBUG !!!
-		#if counter > 60
-		#	#entry.autodrain()
-		#	readStream.removeListener( "entry", () ->
-		#											console.error( "Removed listener..." )
-		#	)
-		#	return
-
-
-		err = obj = null
-		await utils.streamToJson( entry, defer( err, obj ) )
-		# console.log( "Parsed #{fileName}: #{util.inspect(obj).substr(0,40)}" )
-		#console.log( "Size = #{ Math.round( utils.roughSizeOfObject( obj ) / 1000000 ) }" )
-
-		entry.autodrain()
+    console.error( "Trying to parse #{fileName}" )
+    # DEBUG !!!
+    #if counter > 60
+    #  #entry.autodrain()
+    #  readStream.removeListener( "entry", () ->
+    #                      console.error( "Removed listener..." )
+    #  )
+    #  return
 
 
-		addMinuteObjToIdMap( obj )
-		
+    err = obj = null
+    await utils.streamToJson( entry, defer( err, obj ) )
+    # console.log( "Parsed #{fileName}: #{util.inspect(obj).substr(0,40)}" )
+    #console.log( "Size = #{ Math.round( utils.roughSizeOfObject( obj ) / 1000000 ) }" )
 
-		mu = process.memoryUsage()
-		mu.rss = Math.round( mu.rss / 1000000)
-		mu.heapTotal = Math.round( mu.heapTotal / 1000000 )
-		mu.heapUsed = Math.round( mu.heapUsed / 1000000 ) 
-		console.error( " #{ util.inspect( mu ) } --- idMap contains #{ Object.keys( idMap ).length } = " ) #{ Math.round( utils.roughSizeOfObject( idMap ) / 1000000 ) if counter % 30 == 0}MB 
-	)
-	.on( 'end', () ->
-		console.error( "End does seem to fire, but let's wait for close event..." )
-		# defer() 
-	)
-	.on( 'error', ( error ) ->
-					console.log( "Error: #{ error }" )
-		)
-    .on( 'close', defer() )
+    entry.autodrain()
+
+
+    addMinuteObjToIdMap( obj )
+    
+
+    mu = process.memoryUsage()
+    mu.rss = Math.round( mu.rss / 1000000)
+    mu.heapTotal = Math.round( mu.heapTotal / 1000000 )
+    mu.heapUsed = Math.round( mu.heapUsed / 1000000 ) 
+    console.error( " #{ util.inspect( mu ) } --- idMap contains #{ Object.keys( idMap ).length } = " ) #{ Math.round( utils.roughSizeOfObject( idMap ) / 1000000 ) if counter % 30 == 0}MB 
+  )
+  .on( 'end', () ->
+    console.error( "End does seem to fire, but let's wait for close event..." )
+    # defer() 
+  )
+  .on( 'error', ( error ) ->
+          console.log( "Error: #{ error }" )
+    )
+  .on( 'close', defer() )
 
 
 # OLD VERSION starting from an already unzipped zip file (folder containing a lot of json files)
@@ -150,26 +150,26 @@ startTimeForFile = program.date
 parallel = 5
 upperLimit = 24*60
 for i in [0...upperLimit] by parallel
-	f = ( cb ) ->
-		data = {}
-		await for j in [0...parallel]
-			k = i + j
-			if k < upperLimit
-				currentTimeForFile = moment( startTimeForFile ).add( k, "minutes" )
-				currentFileName = "#{ currentTimeForFile.format( 'YYYY-MM-DD/YYYY-MM-DD-HHmm' ) }Z.json"
-				console.log( "Trying to read file: #{currentFileName}" )
+  f = ( cb ) ->
+    data = {}
+    await for j in [0...parallel]
+      k = i + j
+      if k < upperLimit
+        currentTimeForFile = moment( startTimeForFile ).add( k, "minutes" )
+        currentFileName = "#{ currentTimeForFile.format( 'YYYY-MM-DD/YYYY-MM-DD-HHmm' ) }Z.json"
+        console.log( "Trying to read file: #{currentFileName}" )
 
-				data[ j ] = null
-				utils.fileToJson( currentFileName, defer( err, data[ j ] ) )
-				if err?
-					console.error( err )
+        data[ j ] = null
+        utils.fileToJson( currentFileName, defer( err, data[ j ] ) )
+        if err?
+          console.error( err )
 
-		for j in [0...parallel]
-			addMinuteObjToIdMap( data[ j ] )
-		cb()
+    for j in [0...parallel]
+      addMinuteObjToIdMap( data[ j ] )
+    cb()
 
-	await f( defer() )
-	# console.log( "Run #{i} finished" )
+  await f( defer() )
+  # console.log( "Run #{i} finished" )
 ###
 
 
@@ -183,7 +183,7 @@ fn = "./#{ program.date }.joined.json"
 wstr = fs.createWriteStream( fn, {} )
 #jsonstr = JSONStream.stringifyObject().pipe( wstr )
 #for k, v of idMap
-#	jsonstr.write( [ k, v ] )
+#  jsonstr.write( [ k, v ] )
 #jsonstr.end()
 
 
@@ -192,28 +192,28 @@ wstr.write( "{\n" )
 #console.log( "{" )
 first = true
 for id, f of idMap
-	# check if the Cos array contains points that are in the given regions
-	trailInOneOfRegions = false
-	if program.filter
-		if f.Cos?
-			for r in f.Cos
-				p = { lat: r[ 0 ], lng: r[ 1 ] }
-				#if ( Buchel.lat - latDiff < p.lat < Buchel.lat + latDiff ) and ( Buchel.lng - lngDiff < p.lng < Buchel.lng + lngDiff )
-				#	console.error( JSON.stringify( r ) )
-				if r[ 3 ] <= 5000 and ( isAround( p, airport ) for airport in airports )
-					trailInOneOfRegions = true
-					break
-	if trailInOneOfRegions or not program.filter
-		wstr.write( "#{ if first then '' else ', ' }#{ JSON.stringify( id ) }: #{ JSON.stringify( f ) }\n" )
-		#console.log( "#{ if first then '' else ', ' }#{ JSON.stringify( k ) }: #{ JSON.stringify( v ) }" )
-		first = false
+  # check if the Cos array contains points that are in the given regions
+  trailInOneOfRegions = false
+  if program.filter
+    if f.Cos?
+      for r in f.Cos
+        p = { lat: r[ 0 ], lng: r[ 1 ] }
+        #if ( Buchel.lat - latDiff < p.lat < Buchel.lat + latDiff ) and ( Buchel.lng - lngDiff < p.lng < Buchel.lng + lngDiff )
+        #  console.error( JSON.stringify( r ) )
+        if r[ 3 ] <= 5000 and ( isAround( p, airport ) for airport in airports )
+          trailInOneOfRegions = true
+          break
+  if trailInOneOfRegions or not program.filter
+    wstr.write( "#{ if first then '' else ', ' }#{ JSON.stringify( id ) }: #{ JSON.stringify( f ) }\n" )
+    #console.log( "#{ if first then '' else ', ' }#{ JSON.stringify( k ) }: #{ JSON.stringify( v ) }" )
+    first = false
 wstr.write( "}" )
 #console.log( "}" )
-	
+  
 
 
 
 #await utils.jsonToFile( idMap, fn, defer( err ) )
 #if err?
-#	console.error( "Error writing file: #{fn}" )
-#	process.exit( -1 )
+#  console.error( "Error writing file: #{fn}" )
+#  process.exit( -1 )
