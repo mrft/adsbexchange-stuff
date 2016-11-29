@@ -14,8 +14,10 @@
     "commander": "^2.9.0",
     "fast-json-patch": "^1.1.1",
     "line-by-line": "^0.1.5",
+    "moment-timezone": "^0.5.9",
     "onecolor": "^3.0.4",
     "require-cson": "^0.1.0",
+    "unzip": "^0.1.11",
     "unzipper": "^0.4.1",
     "xlsx-populate": "^0.4.0"
   }
