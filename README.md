@@ -6,13 +6,19 @@ Downloading data from [absbexchange.com](https://www.adsbexchange.com/) and turn
 
 ## Prerequisites
 
-You'll want to have [icedcoffeescript](http://maxtaco.github.io/coffee-script/) installed globally
+You'll want to have [nodejs](http://maxtaco.github.io/coffee-script/) installed. I prefer to [install nodejs as a non-root user](https://degreesofzero.com/article/how-to-install-nodejs-as-a-non-root-user.html).
 
+The code is written in IcedCoffeeScript, which is basically coffeescript - a compile-to-js language - enhanced with await/defer keywords as an elegant solution to the 'nodejs callback hell' problem.
+
+## Getting started
+
+The only thing you should do is run
 <code>
-npm install -g iced-coffee-script
+npm install
 </code>
 
-(IcedCoffeeScript is basically coffeescript - a compile-to-js language - enhanced with await/defer keywords as an elegant solution to the 'nodejs callback hell' problem)
+after you have cloned the repository. This will install all dependencies, and call `npm run build` afterwards, so all the .iced files will be compiled to .js files.
+
 
 ## Usage
 

@@ -4,20 +4,23 @@
   "description": "Transform adsbexchange data from per timestamp to per airplane",
   "main": "index.iced",
   "scripts": {
+    "postinstall": "npm run build",
+    "build": "iced -c .",
+    "//": "for developing: recompile as soon as a .iced file is being modified",
+    "watch": "iced -wc .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "mrft",
   "license": "ISC",
   "dependencies": {
     "JSONStream": "^1.2.1",
-    "async": "^2.1.2",
     "commander": "^2.9.0",
     "fast-json-patch": "^1.1.1",
+    "iced-coffee-script": "^108.0.11",
     "line-by-line": "^0.1.5",
     "moment-timezone": "^0.5.9",
     "onecolor": "^3.0.4",
     "require-cson": "^0.1.0",
-    "unzip": "^0.1.11",
     "unzipper": "^0.4.1",
     "xlsx-populate": "^0.4.0"
   }

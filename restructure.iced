@@ -14,7 +14,7 @@ JSONStream = require('JSONStream')
 # force Europe/Brussels timezone
 moment.tz.setDefault( "Europe/Brussels" );
 
-utils = require( './modules/utils.iced' )
+utils = require( './modules/utils.js' )
 
 program = require('commander')
 

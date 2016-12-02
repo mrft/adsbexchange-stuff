@@ -1,6 +1,14 @@
+# Ignore the following files
 /node_modules
 *.zip
 .DS_Store
 *.joined.json
 *.kml
 *-*-*.xlsx
+*.js
+
+# But not these files
+modules/VRS.js
+
+# ...even if they are in subdirectories (???)
+#!*/

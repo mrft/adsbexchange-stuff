@@ -11,7 +11,7 @@ if [ -a "$restructuredfilename" ] ; then
 	sleep 2
 else
 	echo "Trying to generate $restructuredfilename"
-	iced --nodejs '--max-old-space-size=5000' restructure.iced -d "$date" --filter --militaryOnly
+	node --max-old-space-size=5000 restructure.js -d "$date" --filter --militaryOnly
 fi
 
 
@@ -21,7 +21,7 @@ echo "-----------------"
 echo
 
 t=1
-iced --nodejs '--max-old-space-size=5000' joinedtokml.iced -d "$date" --thin $t > "$date.kml" ; ls -hl "$date.kml"
+node --max-old-space-size=5000 joinedtokml.js -d "$date" --thin $t > "$date.kml" ; ls -hl "$date.kml"
 size=$(ls -l "$date.kml" | awk -F " " '{print $5}')
 
 # google maps only allows uploading a new layer of 5MB or less, so if the file is too big, filter out positions until it fits !!!
@@ -35,7 +35,7 @@ do
 	echo
 	echo "Size of kml file is now: $size, try to make it smaller using $t..."
 	echo
-	iced --nodejs '--max-old-space-size=5000' joinedtokml.iced -d "$date" --thin $t > "$date.kml" ; ls -hl "$date.kml"
+	node --max-old-space-size=5000 joinedtokml.js -d "$date" --thin $t > "$date.kml" ; ls -hl "$date.kml"
 	size=$(ls -l "$date.kml" | awk -F " " '{print $5}')
 done;
 
@@ -44,4 +44,4 @@ echo
 echo "GENERATE xlsx file"
 echo "------------------"
 echo
-iced --nodejs '--max-old-space-size=5000' joinedtoxlsx.iced -d "$date" ; ls -hl "$date.xlsx"
+node --max-old-space-size=5000 joinedtoxlsx.js -d "$date" ; ls -hl "$date.xlsx"
